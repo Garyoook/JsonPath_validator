@@ -51,6 +51,26 @@ def generate_valid_data_src(json_obj):
     return valid_data_srcs
 
 
+def generate_valid_poitype_indices(json_obj):
+    poitype_indices = []
+    len0 = len(jsonpath.jsonpath(json_obj, "$.mapdata.*"))
+    for i in range(len0):
+        len1 = len(jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + ".*"))
+        for j in range(len1):
+            poitype_indices.append(jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + "." + str(j) + ".poitype")[0])
+    return poitype_indices
+
+
+def generate_valid_ctype(json_obj):
+    ctypes = []
+    len0 = len(jsonpath.jsonpath(json_obj, "$.mapdata.*"))
+    for i in range(len0):
+        len1 = len(jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + ".*"))
+        for j in range(len1):
+            ctypes.append(jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + "." + str(j) + ".ctype")[0])
+    return ctypes
+
+
 # 从Json文件中获取json)_obj，传入给main用来验证。
 def generate_jsonObj_from_file():
     inputfile = sys.argv[1]
@@ -70,7 +90,31 @@ if __name__ == '__main__':
     valid_data_h = generate_valid_data_h(json_obj)
     valid_data_color = generate_valid_data_color(json_obj)
     valid_data_src = generate_valid_data_src(json_obj)
+    poitype_indices = generate_valid_poitype_indices(json_obj)
+    ctype_list = generate_valid_ctype(json_obj)
 
+    # validating poitype...
+    poitype_result = True
+    for i in range(len(poitype_indices)):
+        poitype = jsonpath.jsonpath(json_obj, "$.poitype.fuseMap[" + str(poitype_indices[i]) + "]")
+        if not poitype:
+            poitype_result = False
+        else:
+            poitype_result = True
+        print('validated poitype number {}, matched with poitype/fuseMap/{}, {}'.format(poitype_indices[i], i, poitype_result))
+    print('\n')
+
+    # validating ctype...
+    ctype_result = True
+    for i in range(len(ctype_list)):
+        ctype = jsonpath.jsonpath(json_obj, "$.poitype.colorMap[" + str(ctype_list[i]) + "]")
+        if not ctype:
+            ctype_result = False
+        else:
+            ctype_result = True
+        print('validated ctype {}, matched with poitype/colorMap/{}, {}'.format(ctype_list[i], i,
+                                                                                        ctype_result))
+    print('\n')
     # print(len(jsonpath.jsonpath(json_obj, "$.mapdata.0.15.data.features[*]")))
     # print(jsonpath.jsonpath(json_obj, "$.mapdata.0.15.data.features[1].properties.h"))
 
@@ -79,8 +123,61 @@ if __name__ == '__main__':
     for i in range(leni):
         lenj = len(jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + ".*"))
         for j in range(lenj):
+            # properties of mapdata is validated here:
+            # preparation of validating poitype index in mapdata...
+
+            # validating texture...
+            texture = jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + "." + str(j) + ".texture")
+            if texture:
+                result = True
+                error_msg = []
+                texturesroot = jsonpath.jsonpath(json_obj, "$.mapinfo.texturesroot")
+                if texturesroot == False:
+                    result = False
+                    error_msg.append(
+                        'ERROR: missing \"texturesroot\" at mapinfo/')
+                else:
+                    error_msg = ''
+                print("found \"texture\" value {} at mapdata/{}/{}/texture! and \"texturesroot\" {} at"
+                      " mapinfo/texturesroot! validating... {} {}"
+                      .format(texture, i, j, texturesroot, result, error_msg))
+
+            # validate ground -> objType
+            ground = jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + "." + str(j) + ".ground")
+            if ground:
+                if (ground[0] == 1):
+                    result = True
+                    error_msg = []
+                    objType = jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + "." + str(j) + ".objType")[0]
+                    if objType != 'Extruded':
+                        result = False
+                        error_msg.append('ERROR: missing \"objType\" at mapinfo/')
+                    else:
+                        error_msg = ''
+                    print(
+                        "found \"ground\" value {} and \"objType\" \"{}\" at mapdata/{}/{}/texture! validating... {} {}"
+                            .format(ground, objType, i, j, result, error_msg))
+
+            type = jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + "." + str(j) + ".type")
+            if type:
+                if (type[0] == 'Object'):
+                    result = True
+                    error_msg = []
+                    objType = jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + "." + str(j) + ".objType")[0]
+                    if objType != 'Extruded':
+                        result = False
+                        error_msg.append('ERROR: missing \"objType\" at mapinfo/')
+                    else:
+                        error_msg = ''
+                    print(
+                        "found \"type\" value {} and \"objType\" \"{}\" at mapdata/{}/{}/texture! validating... {} {}"
+                            .format(type, objType, i, j, result, error_msg))
+
+            # properties of mapdata/data/features is checked here:
             lenk = len(jsonpath.jsonpath(json_obj, "$.mapdata.0.15.data.features[*]"))
             for k in range(lenk):
+
+                # 当data中的feature包含"map"时， k循环了每一个具有"map"的"feature"， 并检查了所在"mapdata"层是否符合规定。
                 map = jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + "." + str(j) +
                                         ".data.features[" + str(k) + "].properties.map")
                 if map:
@@ -93,10 +190,10 @@ if __name__ == '__main__':
                         error_msg.append(
                             'ERROR: missing \"name\" at mapdata/{}/{}/data/features[{}]/properties/'.format(i, j, k))
                     print("found \"map\" value {} and \"name\" {} at"
-                          " mapdata/{}/{}/data/features[{}]/properties/lpos! \nvalidating... {}\n{}\n"
+                          " mapdata/{}/{}/data/features[{}]/properties/lpos! validating... {} {}"
                           .format(map, name, i, j, k, result, error_msg))
 
-                # 当data中的feature包含"h"时， k循环了每一个具有"h"的"feature"， 并检查了所在"mapdata"层是否符合规定。
+                # 当data中的feature包含"lpos"时， k循环了每一个具有"lpos"的"feature"， 并检查了所在"mapdata"层是否符合规定。
                 lpos = jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + "." + str(j) +
                                          ".data.features[" + str(k) + "].properties.lpos")
                 if lpos:
@@ -128,14 +225,14 @@ if __name__ == '__main__':
                             error_msg = ''
 
                     print("found \"lpos\" value {} and \"name\" {} \"name2\" {} at"
-                          " mapdata/{}/{}/data/features[{}]/properties/lpos! \nvalidating... {}\n{}\n"
+                          " mapdata/{}/{}/data/features[{}]/properties/lpos! validating... {} {}"
                           .format(lpos, name, name2, i, j, k, result, error_msg))
 
                 # 当data中的feature包含"h"时， k循环了每一个具有"h"的"feature"， 并检查了所在"mapdata"层是否符合规定。
                 h = jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + "." + str(j) +
                                       ".data.features[" + str(k) + "].properties.h")
                 if h:
-                    print("found \"h\" value {} at mapdata/{}/{}/data/features[{}]/properties/h! \nvalidating... {}\n"
+                    print("found \"h\" value {} at mapdata/{}/{}/data/features[{}]/properties/h! validating... {}"
                           .format(h, i, j, k, validate(valid_data_h, i, j)))
 
                 # 当data中的feature包含"color"时， k循环了每一个具有"color"的"feature"， 并检查了所在"mapdata"层是否符合规定。
@@ -143,7 +240,7 @@ if __name__ == '__main__':
                                           ".data.features[" + str(k) + "].properties.color")
                 if color:
                     print("found \"color\" value {} at mapdata/{}/{}/data/features[{}]/properties/color!"
-                          " \nvalidating... {}\n".format(color, i, j, k, validate(valid_data_color, i, j)))
+                          " validating... {}\n".format(color, i, j, k, validate(valid_data_color, i, j)))
 
                 # 当data中的feature包含"src"时， k循环了每一个具有"src"的"feature"， 并检查了所在"mapdata"层是否符合规定。
                 src = jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + "." + str(j) +
@@ -168,7 +265,6 @@ if __name__ == '__main__':
                             'ERROR: missing \"xw\" at mapdata/{}/{}/data/features[{}]/properties/'.format(i, j, k))
                     else:
                         error_msg = ''
-
                     print(
-                        "found \"src\" value {} at mapdata/{}/{}/data/features[{}]/properties/src! \nvalidating... {}\n{}\n"
+                        "found \"src\" value {} at mapdata/{}/{}/data/features[{}]/properties/src! validating... {} {}"
                             .format(src, i, j, k, result, error_msg))
