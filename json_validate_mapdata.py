@@ -57,7 +57,9 @@ def generate_valid_poitype_indices(json_obj):
     for i in range(len0):
         len1 = len(jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + ".*"))
         for j in range(len1):
-            poitype_indices.append(jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + "." + str(j) + ".poitype")[0])
+            poitype = jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + "." + str(j) + ".poitype")
+            if poitype:
+                poitype_indices.append(poitype[0])
     return poitype_indices
 
 
@@ -240,7 +242,11 @@ def validate_src(json_obj):
         lenj = len(jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + ".*"))
         for j in range(lenj):
             # properties of mapdata/data/features is checked here:
-            lenk = len(jsonpath.jsonpath(json_obj, "$.mapdata.0.15.data.features[*]"))
+            feature_content = jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + "." + str(j) + ".data.features[*]")
+            if feature_content:
+                lenk = len(feature_content)
+            else:
+                lenk = 0
             for k in range(lenk):
                 # 当data中的feature包含"src"时， k循环了每一个具有"src"的"feature"， 并检查了所在"mapdata"层是否符合规定。
                 src = jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + "." + str(j) +
@@ -292,11 +298,14 @@ def validate_h(json_obj):
         lenj = len(jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + ".*"))
         for j in range(lenj):
             # properties of mapdata/data/features is checked here:
-            lenk = len(jsonpath.jsonpath(json_obj, "$.mapdata.0.15.data.features[*]"))
+            feature_content = jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + "." + str(j) + ".data.features[*]")
+            if feature_content:
+                lenk = len(feature_content)
+            else:
+                lenk = 0
             for k in range(lenk):
                 # 当data中的feature包含"h"时， k循环了每一个具有"h"的"feature"， 并检查了所在"mapdata"层是否符合规定。
-                h = jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + "." + str(j) +
-                                      ".data.features[" + str(k) + "].properties.h")
+                h = jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + "." + str(j) + ".data.features[" + str(k) + "].properties.h")
                 if h:
                     if validate(valid_data_h, i, j):
                         counter_succ += 1
@@ -322,7 +331,11 @@ def validate_color(json_obj):
         lenj = len(jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + ".*"))
         for j in range(lenj):
             # properties of mapdata/data/features is checked here:
-            lenk = len(jsonpath.jsonpath(json_obj, "$.mapdata.0.15.data.features[*]"))
+            feature_content = jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + "." + str(j) + ".data.features[*]")
+            if feature_content:
+                lenk = len(feature_content)
+            else:
+                lenk = 0
             for k in range(lenk):
                 # 当data中的feature包含"color"时， k循环了每一个具有"color"的"feature"， 并检查了所在"mapdata"层是否符合规定。
                 color = jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + "." + str(j) +
@@ -351,7 +364,11 @@ def validata_map(json_obj):
         lenj = len(jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + ".*"))
         for j in range(lenj):
             # properties of mapdata/data/features is checked here:
-            lenk = len(jsonpath.jsonpath(json_obj, "$.mapdata.0.15.data.features[*]"))
+            feature_content = jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + "." + str(j) + ".data.features[*]")
+            if feature_content:
+                lenk = len(feature_content)
+            else:
+                lenk = 0
             for k in range(lenk):
                 # 当data中的feature包含"map"时， k循环了每一个具有"map"的"feature"， 并检查了所在"mapdata"层是否符合规定。
                 map = jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + "." + str(j) +
@@ -372,8 +389,9 @@ def validata_map(json_obj):
                         error_msg = ''
                         counter_succ += 1
                         counter_total += 1
-                    print("found \"map\" value {} and \"name\" {} at mapdata/{}/{}/data/features[{}]/properties/lpos! validating... {} {}"
-                          .format(map, name, i, j, k, result, error_msg))
+                    print(
+                        "found \"map\" value {} and \"name\" {} at mapdata/{}/{}/data/features[{}]/properties/lpos! validating... {} {}"
+                        .format(map, name, i, j, k, result, error_msg))
     print(
         '------------ in poitype test: {} violation found, Test passed ({}/{}) ------------------------------------\n'.format(
             counter_fail, counter_succ, counter_total))
@@ -389,7 +407,11 @@ def validate_lpos(json_obj):
         lenj = len(jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + ".*"))
         for j in range(lenj):
             # properties of mapdata/data/features is checked here:
-            lenk = len(jsonpath.jsonpath(json_obj, "$.mapdata.0.15.data.features[*]"))
+            feature_content = jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + "." + str(j) + ".data.features[*]")
+            if feature_content:
+                lenk = len(feature_content)
+            else:
+                lenk = 0
             for k in range(lenk):
                 # 当data中的feature包含"lpos"时， k循环了每一个具有"lpos"的"feature"， 并检查了所在"mapdata"层是否符合规定。
                 lpos = jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + "." + str(j) +
