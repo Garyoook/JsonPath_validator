@@ -74,8 +74,8 @@ def generate_valid_ctype(json_obj):
 
 
 # 从Json文件中获取json)_obj，传入给main用来验证。
-def generate_jsonObj_from_file():
-    inputfile = sys.argv[1]
+def generate_jsonObj_from_file(inputfile):
+    # inputfile = sys.argv[1]
     file0 = open(inputfile, 'r')
     lines = file0.readlines()
     jsonArr = []
@@ -461,7 +461,7 @@ def validate_lpos(json_obj):
 
 
 if __name__ == '__main__':
-    json_obj = generate_jsonObj_from_file()
+    json_obj = generate_jsonObj_from_file("map-raw.json")
 
     validate_poitype(json_obj)
 
