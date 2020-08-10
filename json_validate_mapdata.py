@@ -1,5 +1,5 @@
 import json
-import sys
+from termcolor import colored
 import jsonpath
 
 
@@ -14,9 +14,11 @@ def generate_valid_data_h(json_obj):
     for i in range(len0):
         len1 = len(jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + ".*"))
         for j in range(len1):
-            objType = jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + "." + str(j) + ".objType")[0]
+            objType = jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + "." + str(j) + ".objType")
             # print(objType)
-            if objType == 'Extruded':
+            if not objType:
+                pass
+            elif objType[0] == 'Extruded':
                 valid_data_hs.append((i, j))
     return valid_data_hs
 
@@ -88,8 +90,7 @@ def generate_jsonObj_from_file(inputfile):
 
 
 def validate_poitype(json_obj):
-    global i
-    print('------------ validating poitype... ------------------------------------------------')
+    print('------------ validating \'mapdata.图层属性.poitype的值必须是poitype.fuseMap中的一个键\'... ------------------------------------------------')
     # validating poitype...
     poitype_indices = generate_valid_poitype_indices(json_obj)
     poitype_result = True
@@ -100,11 +101,13 @@ def validate_poitype(json_obj):
             poitype_result = False
             counter_fail += 1
             counter_total += 1
+            print(colored('cannot find poitype number {} in poitype/fusemap, {}'
+                          .format(poitype_indices[i], poitype_result), 'red'))
         else:
             poitype_result = True
             counter_succ += 1
             counter_total += 1
-        print('validated poitype number {}, matched with poitype/fuseMap/{}, {}'.format(poitype_indices[i], i,
+            print('validated poitype number {}, matched with poitype/fuseMap/{}, {}'.format(poitype_indices[i], i,
                                                                                         poitype_result))
     print(
         '------------ in poitype test: {} violation found, Test passed ({}/{}) ------------------------------------\n'.format(
@@ -113,7 +116,7 @@ def validate_poitype(json_obj):
 
 def validate_ctype(json_obj):
     global i
-    print('------------ validating ctype... ------------------------------------------------')
+    print('------------ validating \'mapdata.图层属性.ctype的值必须是poitype.colorMap中的一个键\'... ------------------------------------------------')
     # validating ctype...
     ctype_list = generate_valid_ctype(json_obj)
     ctype_result = True
@@ -124,11 +127,13 @@ def validate_ctype(json_obj):
             ctype_result = False
             counter_fail += 1
             counter_total += 1
+            print(colored('cannot find ctype {}, in keys of poitype/colorMap/{}, {}'
+                          .format(ctype_list[i], i, ctype_result), 'red'))
         else:
             ctype_result = True
             counter_succ += 1
             counter_total += 1
-        print('validated ctype {}, matched with poitype/colorMap/{}, {}'.format(ctype_list[i], i, ctype_result))
+            print('validated ctype {}, matched with poitype/colorMap/{}, {}'.format(ctype_list[i], i, ctype_result))
     print(
         '------------ in poitype test: {} violation found, Test passed ({}/{}) ------------------------------------\n'.format(
             counter_fail, counter_succ, counter_total))
@@ -159,9 +164,13 @@ def validate_type(json_obj):
                         error_msg = ''
                         counter_succ += 1
                         counter_total += 1
-                    print(
-                        "found \"type\" value {} and \"objType\" \"{}\" at mapdata/{}/{}/texture! validating... {} {}"
-                            .format(type, objType, i, j, result, error_msg))
+
+                    if result:
+                        print("found \"type\" value {} and \"objType\" \"{}\" at mapdata/{}/{}/"
+                              "texture! validating... {} {}".format(type, objType, i, j, result, error_msg))
+                    else:
+                        print(colored("found \"type\" value {} and \"objType\" \"{}\" at mapdata/{}/{}/"
+                              "texture! validating... {} {}".format(type, objType, i, j, result, '\n' + str(error_msg)), 'red'))
     print(
         '------------ in poitype test: {} violation found, Test passed ({}/{}) ------------------------------------\n'.format(
             counter_fail, counter_succ, counter_total))
@@ -181,19 +190,23 @@ def validate_ground(json_obj):
                 if ground[0] == 1:
                     result = True
                     error_msg = []
-                    objType = jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + "." + str(j) + ".objType")[0]
-                    if objType != 'Extruded':
+                    objType = jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + "." + str(j) + ".objType")
+                    if not objType or objType[0] != 'Extruded':
                         result = False
                         counter_fail += 1
                         counter_total += 1
-                        error_msg.append('ERROR: missing \"objType\" at mapinfo/')
+                        error_msg.append("ERROR: incorrect \"objType\" at mapdata." + str(i) + "." + str(j) + ".objType")
                     else:
                         error_msg = ''
                         counter_succ += 1
                         counter_total += 1
-                    print(
-                        "found \"ground\" value {} and \"objType\" \"{}\" at mapdata/{}/{}/texture! validating... {} {}"
-                            .format(ground, objType, i, j, result, error_msg))
+
+                    if result:
+                        print("found \"ground\" value {} and \"objType\" \"{}\" at mapdata/{}/{}/texture! "
+                              "validating... {} {}".format(ground, objType[0], i, j, result, error_msg))
+                    else:
+                        print(colored("found \"ground\" value {} and an incorrect \"objType\" at mapdata/{}/{}/texture! "
+                              "validating... {} {}".format(ground, i, j, result, ('\n' + str(error_msg))), 'red'))
     print(
         '------------ in poitype test: {} violation found, Test passed ({}/{}) ------------------------------------\n'.format(
             counter_fail, counter_succ, counter_total))
@@ -201,7 +214,8 @@ def validate_ground(json_obj):
 
 def validate_texture(json_obj):
     global leni, i, lenj, j, result, error_msg
-    print('------------ validating texture mapping with mapinfo.texturesroot... ------------------------------------')
+    print('------------ validating 如果mapdata.图层属性.texture 存在且不为空, '
+          '则 mapinfo.texturesroot不能为空t... ------------------------------------')
     leni = len(jsonpath.jsonpath(json_obj, "$.mapdata.*"))
     counter_total = counter_succ = counter_fail = 0
     for i in range(leni):
@@ -223,9 +237,15 @@ def validate_texture(json_obj):
                     error_msg = ''
                     counter_succ += 1
                     counter_total += 1
-                print("found \"texture\" value {} at mapdata/{}/{}/texture! and \"texturesroot\" {} at"
-                      " mapinfo/texturesroot! validating... {} {}"
-                      .format(texture, i, j, texturesroot, result, error_msg))
+
+                if result:
+                    print("found \"texture\" value {} at mapdata/{}/{}/texture! and \"texturesroot\" {} at"
+                          " mapinfo/texturesroot! validating... {} {}"
+                          .format(texture, i, j, texturesroot, result, error_msg))
+                else:
+                    print(colored("found \"texture\" value {} at mapdata/{}/{}/texture! and \"texturesroot\" {} at"
+                                  " mapinfo/texturesroot! validating... {} {}"
+                                  .format(texture, i, j, texturesroot, result, ('\n' + str(error_msg))), 'red'))
     print(
         '------------ in poitype test: {} violation found, Test passed ({}/{}) ------------------------------------\n'.format(
             counter_fail, counter_succ, counter_total))
@@ -265,6 +285,18 @@ def validate_src(json_obj):
                                 .format(i, j, k))
                         counter_fail += 1
                         counter_total += 1
+
+                        if xw == False:
+                            result = False
+                            counter_fail += 1
+                            counter_total += 1
+                            error_msg.append(
+                                'ERROR: missing \"xw\" at mapdata/{}/{}/data/features[{}]/properties/'
+                                    .format(i, j, k))
+                        else:
+                            error_msg = ''
+                            counter_succ += 1
+                            counter_total += 1
                     else:
                         if xw == False:
                             result = False
@@ -277,11 +309,15 @@ def validate_src(json_obj):
                             error_msg = ''
                             counter_succ += 1
                             counter_total += 1
-                        error_msg = ''
 
-                    print(
-                        "found \"src\" value {} at mapdata/{}/{}/data/features[{}]/properties/src! validating... {} {}"
-                            .format(src, i, j, k, result, error_msg))
+                    if result:
+                        print(
+                            "found \"src\" value {} at mapdata/{}/{}/data/features[{}]/properties/src! validating... {} {}"
+                                .format(src, i, j, k, result, error_msg))
+                    else:
+                        print(colored(
+                            "found \"src\" value {} at mapdata/{}/{}/data/features[{}]/properties/src! validating... {} {}"
+                                .format(src, i, j, k, result, ('\n' + str(error_msg))), 'red'))
     print(
         '------------ in poitype test: {} violation found, Test passed ({}/{}) ------------------------------------\n'.format(
             counter_fail, counter_succ, counter_total))
@@ -305,23 +341,29 @@ def validate_h(json_obj):
                 lenk = 0
             for k in range(lenk):
                 # 当data中的feature包含"h"时， k循环了每一个具有"h"的"feature"， 并检查了所在"mapdata"层是否符合规定。
-                h = jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + "." + str(j) + ".data.features[" + str(k) + "].properties.h")
+                h = jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + "." + str(j) + ".data.features[" + str(
+                    k) + "].properties.h")
                 if h:
-                    if validate(valid_data_h, i, j):
+                    result = validate(valid_data_h, i, j)
+                    if result:
                         counter_succ += 1
                         counter_total += 1
+                        print("found \"h\" value {} at mapdata/{}/{}/data/features[{}]/properties/h! validating... {}"
+                              .format(h, i, j, k, validate(valid_data_h, i, j)))
                     else:
                         counter_fail += 1
                         counter_total += 1
-                    print("found \"h\" value {} at mapdata/{}/{}/data/features[{}]/properties/h! validating... {}"
-                          .format(h, i, j, k, validate(valid_data_h, i, j)))
+                        print(colored(
+                            "found \"h\" value {} at mapdata/{}/{}/data/features[{}]/properties/h! validating... {}"
+                                .format(h, i, j, k, result), 'red'))
+
     print(
         '------------ in poitype test: {} violation found, Test passed ({}/{}) ------------------------------------\n'.format(
             counter_fail, counter_succ, counter_total))
 
 
 def validate_color(json_obj):
-    global leni, i, lenj, j, lenk, k
+    global leni, i, lenj, j, lenk, k, result
     # loop for validating color
     print('------------ validating color存在，则当前mapdata层的type为polygon ------------------------------------')
     valid_data_color = generate_valid_data_color(json_obj)
@@ -341,14 +383,18 @@ def validate_color(json_obj):
                 color = jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + "." + str(j) +
                                           ".data.features[" + str(k) + "].properties.color")
                 if color:
-                    if validate(valid_data_color, i, j):
+                    result = validate(valid_data_color, i, j)
+                    if result:
                         counter_succ += 1
                         counter_total += 1
+                        print("found \"color\" value {} at mapdata/{}/{}/data/features[{}]/properties/color!"
+                              " validating... {}\n".format(color, i, j, k, result))
                     else:
                         counter_fail += 1
                         counter_total += 1
-                    print("found \"color\" value {} at mapdata/{}/{}/data/features[{}]/properties/color!"
-                          " validating... {}\n".format(color, i, j, k, validate(valid_data_color, i, j)))
+                        print(colored("found \"color\" value {} at mapdata/{}/{}/data/features[{}]/properties/color!"
+                                      " validating... {}\n".format(color, i, j, k, result), 'red'))
+
     print(
         '------------ in poitype test: {} violation found, Test passed ({}/{}) ------------------------------------\n'.format(
             counter_fail, counter_succ, counter_total))
@@ -389,9 +435,15 @@ def validata_map(json_obj):
                         error_msg = ''
                         counter_succ += 1
                         counter_total += 1
-                    print(
-                        "found \"map\" value {} and \"name\" {} at mapdata/{}/{}/data/features[{}]/properties/lpos! validating... {} {}"
-                        .format(map, name, i, j, k, result, error_msg))
+
+                    if result:
+                        print("found \"map\" value {} and \"name\" {} at mapdata/{}/{}/data/features[{}]/properties/"
+                              "lpos! validating... {} {}".format(map, name, i, j, k, result, error_msg))
+                    else:
+                        print(colored(
+                            "found \"map\" value {} and \"name\" {} at mapdata/{}/{}/data/features[{}]/properties/"
+                            "lpos! validating... {} {}".format(map, name, i, j, k, result, ('\n' + str(error_msg)),
+                                                               'red')))
     print(
         '------------ in poitype test: {} violation found, Test passed ({}/{}) ------------------------------------\n'.format(
             counter_fail, counter_succ, counter_total))
@@ -400,7 +452,7 @@ def validata_map(json_obj):
 def validate_lpos(json_obj):
     global leni, i, lenj, j, lenk, k, result, error_msg, name
     # loop for validating lpos:
-    print('------------ validating lpos - name/name2 ------------------------------------------------')
+    print('------------ validating lpos -> name/name2 ------------------------------------------------')
     leni = len(jsonpath.jsonpath(json_obj, "$.mapdata.*"))
     counter_total = counter_succ = counter_fail = 0
     for i in range(leni):
@@ -452,9 +504,16 @@ def validate_lpos(json_obj):
                             counter_succ += 1
                             counter_total += 1
 
-                    print("found \"lpos\" value {} and \"name\" {} \"name2\" {} at"
-                          " mapdata/{}/{}/data/features[{}]/properties/lpos! validating... {} {}"
-                          .format(lpos, name, name2, i, j, k, result, error_msg))
+                    if result:
+                        print("found \"lpos\" value {} and \"name\" {} \"name2\" {} at"
+                              " mapdata/{}/{}/data/features[{}]/properties/lpos! validating... {} {}"
+                              .format(lpos, name, name2, i, j, k, result, error_msg))
+                    else:
+                        print(colored(
+                            "found \"lpos\" value {} and \"name\" {} \"name2\" {} at"
+                            " mapdata/{}/{}/data/features[{}]/properties/lpos! validating... {} {}"
+                                .format(lpos, name, name2, i, j, k, result, ('\n' + str(error_msg))), 'red'))
+
     print(
         '------------ in poitype test: {} violation found, Test passed ({}/{}) ------------------------------------\n'.format(
             counter_fail, counter_succ, counter_total))
