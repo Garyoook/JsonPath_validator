@@ -1,10 +1,10 @@
-import json
-from json_validate_mapdata import generate_jsonObj_from_file
 from jsonschema import validate
 
-schema = generate_jsonObj_from_file("Schema.json")
+from json_validate_mapdata import generate_jsonObj_from_file
 
-sample = generate_jsonObj_from_file("failure.json")
+schema = generate_jsonObj_from_file("jsons/Schema.json")
+
+sample = generate_jsonObj_from_file("jsons/szw.json")
 
 validate(instance=sample, schema= schema)
 

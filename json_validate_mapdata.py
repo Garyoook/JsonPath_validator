@@ -1,6 +1,11 @@
 import json
 from termcolor import colored
 import jsonpath
+from jsons import download_jsondata
+
+# main函数在本文件最下方
+#
+#
 
 
 def validate(data, m, n):
@@ -402,8 +407,8 @@ def validate_color(json_obj):
 
 def validata_map(json_obj):
     global leni, i, lenj, j, lenk, k, result, error_msg, name
-    # loop for validating map:
-    print('------------ validating map非空，则name非空 ------------------------------------------------')
+    # loop for validating mapcode:
+    print('------------ validating mapcode非空，则name非空 ------------------------------------------------')
     leni = len(jsonpath.jsonpath(json_obj, "$.mapdata.*"))
     counter_total = counter_succ = counter_fail = 0
     for i in range(leni):
@@ -416,10 +421,10 @@ def validata_map(json_obj):
             else:
                 lenk = 0
             for k in range(lenk):
-                # 当data中的feature包含"map"时， k循环了每一个具有"map"的"feature"， 并检查了所在"mapdata"层是否符合规定。
-                map = jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + "." + str(j) +
-                                        ".data.features[" + str(k) + "].properties.map")
-                if map:
+                # 当data中的feature包含"mapcode"时， k循环了每一个具有"mapcode"的"feature"， 并检查了所在"mapdata"层是否符合规定。
+                mapcode = jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + "." + str(j) +
+                                        ".data.features[" + str(k) + "].properties.mapcode")
+                if mapcode:
                     result = True
                     error_msg = []
                     name = jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + "." + str(j) +
@@ -432,18 +437,19 @@ def validata_map(json_obj):
                             'ERROR: missing \"name\" at mapdata/{}/{}/data/features[{}]/properties/'.format(i, j,
                                                                                                             k))
                     else:
+                        result = True
                         error_msg = ''
                         counter_succ += 1
                         counter_total += 1
 
                     if result:
-                        print("found \"map\" value {} and \"name\" {} at mapdata/{}/{}/data/features[{}]/properties/"
-                              "lpos! validating... {} {}".format(map, name, i, j, k, result, error_msg))
+                        print("found \"mapcode\" value {} and \"name\" {} at mapdata/{}/{}/data/features[{}]/properties/"
+                              "lpos! validating... {} {}".format(mapcode, name, i, j, k, result, error_msg))
                     else:
                         print(colored(
-                            "found \"map\" value {} and \"name\" {} at mapdata/{}/{}/data/features[{}]/properties/"
-                            "lpos! validating... {} {}".format(map, name, i, j, k, result, ('\n' + str(error_msg)),
-                                                               'red')))
+                            "found \"mapcode\" value {} and \"name\" {} at mapdata/{}/{}/data/features[{}]/properties/"
+                            "lpos! validating... {} {}".format(mapcode, name, i, j, k, result, ('\n' + str(error_msg))
+                                                               ), 'red'))
     print(
         '------------ in poitype test: {} violation found, Test passed ({}/{}) ------------------------------------\n'.format(
             counter_fail, counter_succ, counter_total))
@@ -520,7 +526,8 @@ def validate_lpos(json_obj):
 
 
 if __name__ == '__main__':
-    json_obj = generate_jsonObj_from_file("map-raw.json")
+    # download_jsondata.download('szw')
+    json_obj = generate_jsonObj_from_file("jsons/安徽少name.json")
 
     validate_poitype(json_obj)
 
