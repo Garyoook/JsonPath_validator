@@ -1,10 +1,15 @@
+import sys
+
 from jsonschema import validate
 
 from jsonPath_validate_mapdata import generate_jsonObj_from_file
 
-schema = generate_jsonObj_from_file("jsons/Schema.json")
+target = sys.argv[1]
+schema = sys.argv[2]
 
-sample = generate_jsonObj_from_file("jsons/szw.json")
+sample = generate_jsonObj_from_file(target)
+schema = generate_jsonObj_from_file(schema)
+
 
 validate(instance=sample, schema= schema)
 
