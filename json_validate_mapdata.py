@@ -1,4 +1,6 @@
 import json
+import sys
+
 from termcolor import colored
 import jsonpath
 from jsons import download_jsondata
@@ -581,10 +583,12 @@ def validate_lpos(json_obj):
 
 
 if __name__ == '__main__':
-    appcode = '1291631656846757889'
-    map_name = download_jsondata.download(appcode)
+    # appcode = '1273874511682342914'
+    # map_name = download_jsondata.download(appcode)
+    #
+    # json_obj = generate_jsonObj_from_file('jsons/' + map_name + '.json')
 
-    json_obj = generate_jsonObj_from_file('jsons/' + map_name + '.json')
+    json_obj = generate_jsonObj_from_file(sys.argv[1])
 
     validate_poitype(json_obj)
 
