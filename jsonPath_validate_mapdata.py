@@ -1,4 +1,5 @@
 import json
+import os
 import sys
 
 from termcolor import colored
@@ -624,10 +625,14 @@ def recursivly_validate(appcode):
     download_jsondata.download(appcode)
     json_obj = generate_jsonObj_from_file('多栋/' + appcode + '.json')
 
-
     map_name = jsonpath.jsonpath(json_obj, "$.mapinfo.name")[0]
     print(colored('◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎ ' + map_name  + ' ◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎', 'yellow'))
 
+    print(colored('\nSchema validation:', 'yellow'))
+    os.system('java -jar jsonSchema_validate_mapdata.jar ' + '多栋/' + appcode + '.json')
+
+
+    print(colored('\njsonPath validation:', 'yellow'))
 
     # map_name = download_jsondata.download(appcode)
     # json_obj = generate_jsonObj_from_file('jsons/' + map_name + '.json')
