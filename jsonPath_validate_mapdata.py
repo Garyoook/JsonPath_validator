@@ -3,7 +3,8 @@ import sys
 
 from termcolor import colored
 import jsonpath
-from jsons import download_jsondata
+import download_jsondata
+
 
 # main函数在本文件最下方
 #
@@ -99,7 +100,8 @@ def generate_jsonObj_from_file(inputfile):
 
 
 def validate_poitype(json_obj):
-    print('------------ validating \'mapdata.图层属性.poitype的值必须是poitype.fuseMap中的一个键\'... ------------------------------------------------')
+    print(
+        '------------ validating \'mapdata.图层属性.poitype的值必须是poitype.fuseMap中的一个键\'... ------------------------------------------------')
     # validating poitype...
     poitype_indices = generate_valid_poitype_indices(json_obj)
     poitype_result = True
@@ -116,8 +118,8 @@ def validate_poitype(json_obj):
             poitype_result = True
             counter_succ += 1
             counter_total += 1
-            print('validated poitype number {}, matched with poitype/fuseMap/{}, {}'.format(poitype_indices[i], i,
-                                                                                        poitype_result))
+            # print('validated poitype number {}, matched with poitype/fuseMap/{}, {}'.format(poitype_indices[i], i,
+            #                                                                                 poitype_result))
     print(
         '------------ in poitype test: {} violation found, Test passed ({}/{}) ------------------------------------\n'.format(
             counter_fail, counter_succ, counter_total))
@@ -125,7 +127,8 @@ def validate_poitype(json_obj):
 
 def validate_ctype(json_obj):
     global i
-    print('------------ validating \'mapdata.图层属性.ctype的值必须是poitype.colorMap中的一个键\'... ------------------------------------------------')
+    print(
+        '------------ validating \'mapdata.图层属性.ctype的值必须是poitype.colorMap中的一个键\'... ------------------------------------------------')
     # validating ctype...
     ctype_list = generate_valid_ctype(json_obj)
     counter_total = counter_succ = counter_fail = 0
@@ -141,7 +144,7 @@ def validate_ctype(json_obj):
             ctype_result = True
             counter_succ += 1
             counter_total += 1
-            print('validated ctype {}, matched with poitype/colorMap/{}, {}'.format(ctype_list[i], i, ctype_result))
+            # print('validated ctype {}, matched with poitype/colorMap/{}, {}'.format(ctype_list[i], i, ctype_result))
     print(
         '------------ in poitype test: {} violation found, Test passed ({}/{}) ------------------------------------\n'.format(
             counter_fail, counter_succ, counter_total))
@@ -174,11 +177,13 @@ def validate_type(json_obj):
                         counter_total += 1
 
                     if result:
-                        print("found \"type\" value {} and \"objType\" \"{}\" at mapdata/{}/{}/"
-                              "texture! validating... {} {}".format(type, objType, i, j, result, error_msg))
+                        a = 0 # 无意义 只用作填充
+                        # print("found \"type\" value {} and \"objType\" \"{}\" at mapdata/{}/{}/"
+                        #       "texture! validating... {} {}".format(type, objType, i, j, result, error_msg))
                     else:
                         print(colored("found \"type\" value {} and \"objType\" \"{}\" at mapdata/{}/{}/"
-                              "texture! validating... {} {}".format(type, objType, i, j, result, '\n' + str(error_msg)), 'red'))
+                                      "texture! validating... {} {}".format(type, objType, i, j, result,
+                                                                            '\n' + str(error_msg)), 'red'))
     print(
         '------------ in poitype test: {} violation found, Test passed ({}/{}) ------------------------------------\n'.format(
             counter_fail, counter_succ, counter_total))
@@ -211,11 +216,13 @@ def validate_ground(json_obj):
                         counter_total += 1
 
                     if result:
-                        print("found \"ground\" value {} and \"objType\" \"{}\" at mapdata/{}/{}/texture! "
-                              "validating... {} {}".format(ground, objType[0], i, j, result, error_msg))
+                        a = 0
+                        # print("found \"ground\" value {} and \"objType\" \"{}\" at mapdata/{}/{}/texture! "
+                        #       "validating... {} {}".format(ground, objType[0], i, j, result, error_msg))
                     else:
-                        print(colored("found \"ground\" value {} and an incorrect \"objType\" at mapdata/{}/{}/texture! "
-                              "validating... {} {}".format(ground, i, j, result, ('\n' + str(error_msg))), 'red'))
+                        print(
+                            colored("found \"ground\" value {} and an incorrect \"objType\" at mapdata/{}/{}/texture! "
+                                    "validating... {} {}".format(ground, i, j, result, ('\n' + str(error_msg))), 'red'))
     print(
         '------------ in poitype test: {} violation found, Test passed ({}/{}) ------------------------------------\n'.format(
             counter_fail, counter_succ, counter_total))
@@ -248,9 +255,10 @@ def validate_texture(json_obj):
                     counter_total += 1
 
                 if result:
-                    print("found \"texture\" value {} at mapdata/{}/{}/texture! and \"texturesroot\" {} at"
-                          " mapinfo/texturesroot! validating... {} {}"
-                          .format(texture, i, j, texturesroot, result, error_msg))
+                    a = 0
+                    # print("found \"texture\" value {} at mapdata/{}/{}/texture! and \"texturesroot\" {} at"
+                    #       " mapinfo/texturesroot! validating... {} {}"
+                    #       .format(texture, i, j, texturesroot, result, error_msg))
                 else:
                     print(colored("found \"texture\" value {} at mapdata/{}/{}/texture! and \"texturesroot\" {} at"
                                   " mapinfo/texturesroot! validating... {} {}"
@@ -341,9 +349,10 @@ def validate_src(json_obj):
                                         .format(i, j, k))
 
                     if result:
-                        print(
-                            "found \"src\" value {} at mapdata/{}/{}/data/features[{}]/properties/src! validating... {} {}"
-                                .format(src, i, j, k, result, error_msg))
+                        a = 0
+                        # print(
+                        #     "found \"src\" value {} at mapdata/{}/{}/data/features[{}]/properties/src! validating... {} {}"
+                        #         .format(src, i, j, k, result, error_msg))
                     else:
                         print(colored(
                             "found \"src\" value {} at mapdata/{}/{}/data/features[{}]/properties/src! validating... {} {}"
@@ -381,20 +390,21 @@ def validate_h(json_obj):
                     if objType:
                         if objType[0] != 'Extruded' and objType[0] != 'Shape':
                             result = False
-                            error_msg.append('ERROR: Wrong objtype at mapdata/{}/{}/, expected: \'Extruded\' or \'Shape\''
-                                             'but got: {}'.format(i, j, objType[0]))
+                            error_msg.append(
+                                'ERROR: Wrong objtype at mapdata/{}/{}/, expected: \'Extruded\' or \'Shape\''
+                                'but got: {}'.format(i, j, objType[0]))
                         else:
                             error_msg = ''
                     else:
                         result = False
                         error_msg.append('ERROR: objType not found')
 
-
                     if result:
                         counter_succ += 1
                         counter_total += 1
-                        print("found \"h\" value {} and objType {} at mapdata/{}/{}/data/features[{}]/properties/h! validating... {} {}"
-                              .format(h, objType, i, j, k, result, error_msg))
+                        # print(
+                        #     "found \"h\" value {} and objType {} at mapdata/{}/{}/data/features[{}]/properties/h! validating... {} {}"
+                        #         .format(h, objType, i, j, k, result, error_msg))
                     else:
                         counter_fail += 1
                         counter_total += 1
@@ -449,13 +459,14 @@ def validate_color(json_obj):
                     if result:
                         counter_succ += 1
                         counter_total += 1
-                        print("found \"color\" value {} at mapdata/{}/{}/data/features[{}]/properties/color!"
-                              " validating... {} {}".format(color, i, j, k, result, error_msg))
+                        # print("found \"color\" value {} at mapdata/{}/{}/data/features[{}]/properties/color!"
+                        #       " validating... {} {}".format(color, i, j, k, result, error_msg))
                     else:
                         counter_fail += 1
                         counter_total += 1
                         print(colored("found \"color\" value {} at mapdata/{}/{}/data/features[{}]/properties/color!"
-                                      " validating... {} {}".format(color, i, j, k, result, ('\n' + str(error_msg))), 'red'))
+                                      " validating... {} {}".format(color, i, j, k, result, ('\n' + str(error_msg))),
+                                      'red'))
 
     print(
         '------------ in poitype test: {} violation found, Test passed ({}/{}) ------------------------------------\n'.format(
@@ -480,7 +491,7 @@ def validata_map(json_obj):
             for k in range(lenk):
                 # 当data中的feature包含"mapcode"时， k循环了每一个具有"mapcode"的"feature"， 并检查了所在"mapdata"层是否符合规定。
                 mapcode = jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + "." + str(j) +
-                                        ".data.features[" + str(k) + "].properties.mapcode")
+                                            ".data.features[" + str(k) + "].properties.mapcode")
                 if mapcode:
                     result = True
                     error_msg = []
@@ -500,8 +511,10 @@ def validata_map(json_obj):
                         counter_total += 1
 
                     if result:
-                        print("found \"mapcode\" value {} and \"name\" {} at mapdata/{}/{}/data/features[{}]/properties/"
-                              "lpos! validating... {} {}".format(mapcode, name, i, j, k, result, error_msg))
+                        a = 0
+                        # print(
+                        #     "found \"mapcode\" value {} and \"name\" {} at mapdata/{}/{}/data/features[{}]/properties/"
+                        #     "lpos! validating... {} {}".format(mapcode, name, i, j, k, result, error_msg))
                     else:
                         print(colored(
                             "found \"mapcode\" value {} and \"name\" {} at mapdata/{}/{}/data/features[{}]/properties/"
@@ -568,9 +581,10 @@ def validate_lpos(json_obj):
                             counter_total += 1
 
                     if result:
-                        print("found \"lpos\" value {} and \"name\" {} \"name2\" {} at"
-                              " mapdata/{}/{}/data/features[{}]/properties/lpos! validating... {} {}"
-                              .format(lpos, name, name2, i, j, k, result, error_msg))
+                        a = 0
+                        # print("found \"lpos\" value {} and \"name\" {} \"name2\" {} at"
+                        #       " mapdata/{}/{}/data/features[{}]/properties/lpos! validating... {} {}"
+                        #       .format(lpos, name, name2, i, j, k, result, error_msg))
                     else:
                         print(colored(
                             "found \"lpos\" value {} and \"name\" {} \"name2\" {} at"
@@ -582,30 +596,57 @@ def validate_lpos(json_obj):
             counter_fail, counter_succ, counter_total))
 
 
-if __name__ == '__main__':
+def recursively_check(json_obj):
+    mapcode_list = []
+    len0 = len(jsonpath.jsonpath(json_obj, "$.mapdata.*"))
+    for i in range(len0):
+        len1 = len(jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + ".*"))
+        for j in range(len1):
+            feature_content = jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + "." + str(j) + ".data.features[*]")
+            if feature_content:
+                lenk = len(feature_content)
+            else:
+                lenk = 0
+            for k in range(lenk):
+                # 当data中的feature包含"src"时， k循环了每一个具有"src"的"feature"， 并检查了所在"mapdata"层是否符合规定。
+                mapcode = jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + "." + str(j) +
+                                            ".data.features[" + str(k) + "].properties.mapcode")
+                if mapcode:
+                    mapcode_list.append(mapcode[0])
+
+    for mapcode in mapcode_list:
+        recursivly_validate(mapcode)
+
+
+def recursivly_validate(appcode):
+
     # appcode = '1273874511682342914'
+    download_jsondata.download(appcode)
+    json_obj = generate_jsonObj_from_file('多栋/' + appcode + '.json')
+
+
+    map_name = jsonpath.jsonpath(json_obj, "$.mapinfo.name")[0]
+    print(colored('◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎ ' + map_name  + ' ◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎', 'yellow'))
+
+
     # map_name = download_jsondata.download(appcode)
-    #
     # json_obj = generate_jsonObj_from_file('jsons/' + map_name + '.json')
-
-    json_obj = generate_jsonObj_from_file(sys.argv[1])
-
+    # json_obj = generate_jsonObj_from_file(sys.argv[1])
     validate_poitype(json_obj)
-
     validate_ctype(json_obj)
-
     validate_type(json_obj)
-
     validate_ground(json_obj)
-
     validate_texture(json_obj)
-
     validate_src(json_obj)
-
     validate_h(json_obj)
-
     validate_color(json_obj)
-
     validata_map(json_obj)
-
     validate_lpos(json_obj)
+    # recursively check submaps:
+    recursively_check(json_obj)
+
+
+if __name__ == '__main__':
+    recursivly_validate(sys.argv[1])
+
+    print('Completed.')
