@@ -626,11 +626,39 @@ def recursivly_validate(appcode):
     json_obj = generate_jsonObj_from_file('多栋/' + appcode + '.json')
 
     map_name = jsonpath.jsonpath(json_obj, "$.mapinfo.name")[0]
-    print(colored('◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎ ' + map_name  + ' ◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎◼︎', 'yellow'))
+    print(colored('---------------------------------- ' + map_name  + ' ------------------------------------------------------------------------------------', 'yellow'))
 
     print(colored('\nSchema validation:', 'yellow'))
     os.system('java -jar jsonSchema_validate_mapdata.jar ' + '多栋/' + appcode + '.json')
 
+
+    print(colored('\njsonPath validation:', 'yellow'))
+
+    # map_name = download_jsondata.download(appcode)
+    # json_obj = generate_jsonObj_from_file('jsons/' + map_name + '.json')
+    # json_obj = generate_jsonObj_from_file(sys.argv[1])
+    validate_poitype(json_obj)
+    validate_ctype(json_obj)
+    validate_type(json_obj)
+    validate_ground(json_obj)
+    validate_texture(json_obj)
+    validate_src(json_obj)
+    validate_h(json_obj)
+    validate_color(json_obj)
+    validata_map(json_obj)
+    validate_lpos(json_obj)
+
+
+def validate_first_item(mapcode_path):
+    json_obj = generate_jsonObj_from_file(mapcode_path)
+
+    map_name = jsonpath.jsonpath(json_obj, "$.mapinfo.name")[0]
+    print(colored(
+        '---------------------------------- ' + map_name + ' ------------------------------------------------------------------------------------',
+        'yellow'))
+
+    print(colored('\nSchema validation:', 'yellow'))
+    os.system('java -jar jsonSchema_validate_mapdata.jar ' + mapcode_path)
 
     print(colored('\njsonPath validation:', 'yellow'))
 
@@ -652,6 +680,6 @@ def recursivly_validate(appcode):
 
 
 if __name__ == '__main__':
-    recursivly_validate(sys.argv[1])
+    validate_first_item(sys.argv[1])
 
-    print('Completed.')
+    print(colored('Completed.', 'yellow'))
