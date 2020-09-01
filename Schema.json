@@ -1,0 +1,1349 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "https://location.seeklane.com/static/map/1260746312047923202/data.json",
+    "type": "object",
+    "description": "The root schema comprises the entire JSON document.",
+    "default": {},
+    "required": [
+        "packTime",
+        "mapinfo",
+        "poitype",
+        "transRegion",
+        "style",
+        "routePolicies",
+        "mapdata",
+        "aps",
+        "roads",
+        "connection"
+    ],
+    "properties": {
+        "packTime": {
+            "$id": "#/properties/packTime",
+            "type": "string",
+            "description": "此data.json生成的时间",
+            "default": ""
+        },
+        "mapinfo": {
+            "$id": "#/properties/mapinfo",
+            "type": "object",
+            "description": "地图的整体配置",
+            "default": {},
+            "required": [
+                "name",
+                "regions",
+                "floors",
+                "defaultFloor",
+                "iconsroot",
+                "modelsroot",
+                "center",
+                "floorZShift",
+                "heading"
+            ],
+            "properties": {
+                "name": {
+                    "$id": "#/properties/mapinfo/properties/name",
+                    "type": "string",
+                    "description": "地图名称，在云服务管理平台上新建大楼时，作为该大楼名称的默认值",
+                    "default": ""
+                },
+                "regions": {
+                    "$id": "#/properties/mapinfo/properties/regions",
+                    "type": "array",
+                    "description": "区域",
+                    "default": [],
+                    "contains": true,
+                    "additionalItems": true,
+                    "items": {
+                        "$id": "#/properties/mapinfo/properties/regions/items",
+                        "type": "object",
+                        "description": "An explanation about the purpose of this instance.",
+                        "default": {},
+                        "required": [
+                            "region",
+                            "name",
+                            "alias",
+                            "type",
+                            "z",
+                            "zposition"
+                        ],
+                        "properties": {
+                            "region": {
+                                "$id": "#/properties/mapinfo/properties/regions/items/properties/region",
+                                "type": "integer",
+                                "description": "从0开始连续递增",
+                                "default": 0
+                            },
+                            "name": {
+                                "$id": "#/properties/mapinfo/properties/regions/items/properties/name",
+                                "type": "string",
+                                "description": "An explanation about the purpose of this instance.",
+                                "default": ""
+                            },
+                            "alias": {
+                                "$id": "#/properties/mapinfo/properties/regions/items/properties/alias",
+                                "type": "string",
+                                "description": "楼层切换器显示的楼层数（可能是F2、23层、-1楼等）",
+                                "default": ""
+                            },
+                            "url": {
+                                "$id": "#/properties/mapinfo/properties/regions/items/properties/url",
+                                "type": "string",
+                                "description": "表示该楼层对应的地图数据所在文件路径，打包地图数据时用",
+                                "default": ""
+                            },
+                            "type": {
+                                "$id": "#/properties/mapinfo/properties/regions/items/properties/type",
+                                "type": "integer",
+                                "description": "0表示该区域可驾车导航，非0表示不可驾车导航",
+                                "default": 0
+                            },
+                            "z": {
+                                "$id": "#/properties/mapinfo/properties/regions/items/properties/z",
+                                "type": "integer",
+                                "description": "An explanation about the purpose of this instance.",
+                                "default": 0
+                            },
+                            "zposition": {
+                                "$id": "#/properties/mapinfo/properties/regions/items/properties/zposition",
+                                "type": "integer",
+                                "description": "在前端改变-1楼到1楼之间的高度，正负加减floorZshift的值",
+                                "default": 0
+                            },
+                            "entries": {
+                                "$id": "#/properties/mapinfo/properties/regions/items/properties/entries",
+                                "type": "array",
+                                "description": "An explanation about the purpose of this instance.",
+                                "default": [],
+                                "contains": true,
+                                "additionalItems": true,
+                                "items": {
+                                    "$id": "#/properties/mapinfo/properties/regions/items/properties/entries/items",
+                                    "type": "object",
+                                    "description": "An explanation about the purpose of this instance.",
+                                    "default": {},
+                                    "required": [
+                                        "in",
+                                        "out"
+                                    ],
+                                    "properties": {
+                                        "in": {
+                                            "$id": "#/properties/mapinfo/properties/regions/items/properties/entries/items/properties/in",
+                                            "type": "object",
+                                            "description": "An explanation about the purpose of this instance.",
+                                            "default": {},
+                                            "required": [
+                                                "x",
+                                                "y",
+                                                "z"
+                                            ],
+                                            "properties": {
+                                                "x": {
+                                                    "$id": "#/properties/mapinfo/properties/regions/items/properties/entries/items/properties/in/properties/x",
+                                                    "type": "number",
+                                                    "description": "An explanation about the purpose of this instance.",
+                                                    "default": 0.0
+                                                },
+                                                "y": {
+                                                    "$id": "#/properties/mapinfo/properties/regions/items/properties/entries/items/properties/in/properties/y",
+                                                    "type": "number",
+                                                    "description": "An explanation about the purpose of this instance.",
+                                                    "default": 0.0
+                                                },
+                                                "z": {
+                                                    "$id": "#/properties/mapinfo/properties/regions/items/properties/entries/items/properties/in/properties/z",
+                                                    "type": "integer",
+                                                    "description": "An explanation about the purpose of this instance.",
+                                                    "default": 0
+                                                }
+                                            },
+                                            "additionalProperties": true
+                                        },
+                                        "out": {
+                                            "$id": "#/properties/mapinfo/properties/regions/items/properties/entries/items/properties/out",
+                                            "type": "object",
+                                            "description": "An explanation about the purpose of this instance.",
+                                            "default": {},
+                                            "required": [
+                                                "x",
+                                                "y",
+                                                "z"
+                                            ],
+                                            "properties": {
+                                                "x": {
+                                                    "$id": "#/properties/mapinfo/properties/regions/items/properties/entries/items/properties/out/properties/x",
+                                                    "type": "number",
+                                                    "description": "An explanation about the purpose of this instance.",
+                                                    "default": 0.0
+                                                },
+                                                "y": {
+                                                    "$id": "#/properties/mapinfo/properties/regions/items/properties/entries/items/properties/out/properties/y",
+                                                    "type": "number",
+                                                    "description": "An explanation about the purpose of this instance.",
+                                                    "default": 0.0
+                                                },
+                                                "z": {
+                                                    "$id": "#/properties/mapinfo/properties/regions/items/properties/entries/items/properties/out/properties/z",
+                                                    "type": "integer",
+                                                    "description": "An explanation about the purpose of this instance.",
+                                                    "default": 0
+                                                }
+                                            },
+                                            "additionalProperties": true
+                                        }
+                                    },
+                                    "additionalProperties": true
+                                }
+                            }
+                        },
+                        "additionalProperties": true
+                    }
+                },
+                "floors": {
+                    "$id": "#/properties/mapinfo/properties/floors",
+                    "type": "array",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": [],
+                    "contains": true,
+                    "additionalItems": true,
+                    "items": {
+                        "$id": "#/properties/mapinfo/properties/floors/items",
+                        "type": "array",
+                        "description": "An explanation about the purpose of this instance.",
+                        "default": [],
+                        "contains": true,
+                        "additionalItems": true,
+                        "items": {
+                            "$id": "#/properties/mapinfo/properties/floors/items/items",
+                            "type": "integer",
+                            "description": "An explanation about the purpose of this instance.",
+                            "default": 0
+                        }
+                    }
+                },
+                "defaultFloor": {
+                    "$id": "#/properties/mapinfo/properties/defaultFloor",
+                    "type": "integer",
+                    "description": "地图初始化时显示的楼层数.",
+                    "default": 0
+                },
+                "iconsroot": {
+                    "$id": "#/properties/mapinfo/properties/iconsroot",
+                    "type": "string",
+                    "description": "poi图标所在的地址",
+                    "default": ""
+                },
+                "modelsroot": {
+                    "$id": "#/properties/mapinfo/properties/modelsroot",
+                    "type": "string",
+                    "description": "3D模型所在的地址",
+                    "default": ""
+                },
+                "center": {
+                    "$id": "#/properties/mapinfo/properties/center",
+                    "type": "array",
+                    "description": "在云服务管理平台里面地图显示的位置坐标",
+                    "default": [],
+                    "contains": true,
+                    "additionalItems": true,
+                    "items": {
+                        "$id": "#/properties/mapinfo/properties/center/items",
+                        "type": "number",
+                        "description": "An explanation about the purpose of this instance.",
+                        "default": 0.0
+                    }
+                },
+                "floorZShift": {
+                    "$id": "#/properties/mapinfo/properties/floorZShift",
+                    "type": "integer",
+                    "description": "两层楼之间的高度、距离",
+                    "default": 0
+                },
+                "focusRange": {
+                    "$id": "#/properties/mapinfo/properties/focusRange",
+                    "type": "integer",
+                    "description": "-",
+                    "default": 0
+                },
+                "heading": {
+                    "$id": "#/properties/mapinfo/properties/heading",
+                    "type": "integer",
+                    "description": "地图初始化时地图正上方与正北的夹角（度）",
+                    "default": 0
+                },
+                "resolution0": {
+                    "$id": "#/properties/mapinfo/properties/resolution0",
+                    "type": "number",
+                    "description": "控制单层转多层时的缩放比例",
+                    "default": 0.0
+                },
+                "maxResolution": {
+                    "$id": "#/properties/mapinfo/properties/maxResolution",
+                    "type": "integer",
+                    "description": "地图可以缩小的最小比例（每像素表示的距离）",
+                    "default": 0
+                }
+            },
+            "additionalProperties": true
+        },
+        "poitype": {
+            "$id": "#/properties/poitype",
+            "type": "object",
+            "description": "配置poi相关的信息",
+            "default": {},
+            "required": [
+                "imageRoot",
+                "searchGroups",
+                "colorMap",
+                "fuseMap",
+                "transitionType",
+                "transferOrder"
+            ],
+            "properties": {
+                "imageRoot": {
+                    "$id": "#/properties/poitype/properties/imageRoot",
+                    "type": "string",
+                    "description": "搜索栏及搜索结果图标所在地址",
+                    "default": ""
+                },
+                "searchGroups": {
+                    "$id": "#/properties/poitype/properties/searchGroups",
+                    "type": "array",
+                    "description": "快捷搜索栏配置信息",
+                    "default": [],
+                    "contains": true,
+                    "additionalItems": true,
+                    "items": {
+                        "$id": "#/properties/poitype/properties/searchGroups/items",
+                        "type": "object",
+                        "description": "An explanation about the purpose of this instance.",
+                        "default": {},
+                        "required": [
+                            "src",
+                            "icon",
+                            "name",
+                            "type"
+                        ],
+                        "properties": {
+                            "class": {
+                                "$id": "#/properties/poitype/properties/searchGroups/items/properties/class",
+                                "type": "string",
+                                "description": "An explanation about the purpose of this instance.",
+                                "default": ""
+                            },
+                            "src": {
+                                "$id": "#/properties/poitype/properties/searchGroups/items/properties/src",
+                                "type": "string",
+                                "description": "An explanation about the purpose of this instance.",
+                                "default": ""
+                            },
+                            "icon": {
+                                "$id": "#/properties/poitype/properties/searchGroups/items/properties/icon",
+                                "type": "string",
+                                "description": "快捷搜索结果图标所在地址",
+                                "default": ""
+                            },
+                            "name": {
+                                "$id": "#/properties/poitype/properties/searchGroups/items/properties/name",
+                                "type": "string",
+                                "description": "An explanation about the purpose of this instance.",
+                                "default": ""
+                            },
+                            "type": {
+                                "$id": "#/properties/poitype/properties/searchGroups/items/properties/type",
+                                "type": "integer",
+                                "description": "An explanation about the purpose of this instance.",
+                                "default": 0
+                            }
+                        },
+                        "additionalProperties": true
+                    }
+                },
+                "colorMap": {
+                    "$id": "#/properties/poitype/properties/colorMap",
+                    "type": "object",
+                    "description": "地图图层颜色配置对应关系",
+                    "default": {},
+                    "required": [],
+                    "properties": {},
+                    "additionalProperties": true
+                },
+                "fuseMap": {
+                    "$id": "#/properties/poitype/properties/fuseMap",
+                    "type": "object",
+                    "description": "所有poi类型的集合，其中包含poi名称近义词表",
+                    "default": {},
+                    "required": [],
+                    "properties": {},
+                    "additionalProperties": true
+                },
+                "transitionType": {
+                    "$id": "#/properties/poitype/properties/transitionType",
+                    "type": "object",
+                    "description": "换层方式编号-名称对应表（现在一般不用这种，用下面的transferOrder",
+                    "default": {},
+                    "required": [],
+                    "additionalProperties": true
+                },
+                "transferOrder": {
+                    "$id": "#/properties/poitype/properties/transferOrder",
+                    "type": "object",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": {},
+                    "required": [
+                        "disableChange",
+                        "typeOrder",
+                        "walk"
+                    ],
+                    "properties": {
+                        "disableChange": {
+                            "$id": "#/properties/poitype/properties/transferOrder/properties/disableChange",
+                            "type": "boolean",
+                            "description": "An explanation about the purpose of this instance.",
+                            "default": false
+                        },
+                        "typeOrder": {
+                            "$id": "#/properties/poitype/properties/transferOrder/properties/typeOrder",
+                            "type": "array",
+                            "contains": true,
+                            "description": "An explanation about the purpose of this instance.",
+                            "default": [],
+                            "additionalItems": true,
+                            "items": {
+                                "$id": "#/properties/poitype/properties/transferOrder/properties/typeOrder/items",
+                                "type": "string",
+                                "description": "An explanation about the purpose of this instance.",
+                                "default": ""
+                            }
+                        },
+                        "walk": {
+                            "$id": "#/properties/poitype/properties/transferOrder/properties/walk",
+                            "type": "object",
+                            "description": "An explanation about the purpose of this instance.",
+                            "default": {},
+                            "required": [
+                                "preferOrder"
+                            ],
+                            "properties": {
+                                "preferOrder": {
+                                    "$id": "#/properties/poitype/properties/transferOrder/properties/walk/properties/preferOrder",
+                                    "type": "array",
+                                    "contains": true,
+                                    "description": "An explanation about the purpose of this instance.",
+                                    "default": [],
+                                    "additionalItems": true,
+                                    "items": {
+                                        "$id": "#/properties/poitype/properties/transferOrder/properties/walk/properties/preferOrder/items",
+                                        "type": "string",
+                                        "description": "An explanation about the purpose of this instance.",
+                                        "default": ""
+                                    }
+                                }
+                            },
+                            "additionalProperties": true
+                        }
+                    },
+                    "additionalProperties": true
+                }
+            },
+            "additionalProperties": true
+        },
+        "transRegion": {
+            "$id": "#/properties/transRegion",
+            "type": "object",
+            "description": "换乘区域，在某些区域换乘（在电梯旁边设置一个区域，当定位点到达这个区域内才会显示用户在此换乘，防止定位点跳到二楼而显示在二楼换乘",
+            "default": {},
+            "required": [
+                "liftsRegion",
+                "stairsRegion",
+                "boundaryBufferAreas"
+            ],
+            "properties": {
+                "liftsRegion": {
+                    "$id": "#/properties/transRegion/properties/liftsRegion",
+                    "type": "array",
+                    "contains": true,
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": [],
+                    "additionalItems": true,
+                    "items": {
+                        "$id": "#/properties/transRegion/properties/liftsRegion/items",
+                        "type": "object",
+                        "description": "An explanation about the purpose of this instance.",
+                        "default": {},
+                        "required": [
+                            "polygon",
+                            "z"
+                        ],
+                        "properties": {
+                            "polygon": {
+                                "$id": "#/properties/transRegion/properties/liftsRegion/items/properties/polygon",
+                                "type": "array",
+                                "contains": true,
+                                "description": "An explanation about the purpose of this instance.",
+                                "default": [],
+                                "additionalItems": true,
+                                "items": {
+                                    "$id": "#/properties/transRegion/properties/liftsRegion/items/properties/polygon/items",
+                                    "type": "array",
+                                    "contains": true,
+                                    "description": "An explanation about the purpose of this instance.",
+                                    "default": [],
+                                    "additionalItems": true,
+                                    "items": {
+                                        "$id": "#/properties/transRegion/properties/liftsRegion/items/properties/polygon/items/items",
+                                        "type": "number",
+                                        "description": "An explanation about the purpose of this instance.",
+                                        "default": 0.0
+                                    }
+                                }
+                            },
+                            "z": {
+                                "$id": "#/properties/transRegion/properties/liftsRegion/items/properties/z",
+                                "type": "integer",
+                                "description": "An explanation about the purpose of this instance.",
+                                "default": 0
+                            }
+                        },
+                        "additionalProperties": true
+                    }
+                },
+                "stairsRegion": {
+                    "$id": "#/properties/transRegion/properties/stairsRegion",
+                    "type": "array",
+                    "contains": true,
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": [],
+                    "additionalItems": true,
+                    "items": {
+                        "$id": "#/properties/transRegion/properties/stairsRegion/items",
+                        "type": "object",
+                        "description": "An explanation about the purpose of this instance.",
+                        "default": {},
+                        "required": [
+                            "polygon",
+                            "z"
+                        ],
+                        "properties": {
+                            "polygon": {
+                                "$id": "#/properties/transRegion/properties/stairsRegion/items/properties/polygon",
+                                "type": "array",
+                                "contains": true,
+                                "description": "An explanation about the purpose of this instance.",
+                                "default": [],
+                                "additionalItems": true,
+                                "items": {
+                                    "$id": "#/properties/transRegion/properties/stairsRegion/items/properties/polygon/items",
+                                    "type": "array",
+                                    "contains": true,
+                                    "description": "An explanation about the purpose of this instance.",
+                                    "default": [],
+                                    "additionalItems": true,
+                                    "items": {
+                                        "$id": "#/properties/transRegion/properties/stairsRegion/items/properties/polygon/items/items",
+                                        "type": "number",
+                                        "description": "An explanation about the purpose of this instance.",
+                                        "default": 0.0
+                                    }
+                                }
+                            },
+                            "z": {
+                                "$id": "#/properties/transRegion/properties/stairsRegion/items/properties/z",
+                                "type": "integer",
+                                "description": "An explanation about the purpose of this instance.",
+                                "default": 0
+                            }
+                        },
+                        "additionalProperties": true
+                    }
+                },
+                "boundaryBufferAreas": {
+                    "$id": "#/properties/transRegion/properties/boundaryBufferAreas",
+                    "type": "object",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": {},
+                    "required": [
+                        "boundaryArea",
+                        "outside",
+                        "buffer"
+                    ],
+                    "properties": {
+                        "boundaryArea": {
+                            "$id": "#/properties/transRegion/properties/boundaryBufferAreas/properties/boundaryArea",
+                            "type": "array",
+                            "contains": true,
+                            "description": "An explanation about the purpose of this instance.",
+                            "default": [],
+                            "additionalItems": true,
+                            "items": {
+                                "$id": "#/properties/transRegion/properties/boundaryBufferAreas/properties/boundaryArea/items",
+                                "type": "array",
+                                "contains": true,
+                                "description": "An explanation about the purpose of this instance.",
+                                "default": [],
+                                "additionalItems": true,
+                                "items": {
+                                    "$id": "#/properties/transRegion/properties/boundaryBufferAreas/properties/boundaryArea/items/items",
+                                    "type": "number",
+                                    "description": "An explanation about the purpose of this instance.",
+                                    "default": 0.0
+                                }
+                            }
+                        },
+                        "outside": {
+                            "$id": "#/properties/transRegion/properties/boundaryBufferAreas/properties/outside",
+                            "type": "integer",
+                            "description": "An explanation about the purpose of this instance.",
+                            "default": 0
+                        },
+                        "buffer": {
+                            "$id": "#/properties/transRegion/properties/boundaryBufferAreas/properties/buffer",
+                            "type": "array",
+                            "contains": true,
+                            "description": "An explanation about the purpose of this instance.",
+                            "default": [],
+                            "additionalItems": true,
+                            "items": {
+                                "$id": "#/properties/transRegion/properties/boundaryBufferAreas/properties/buffer/items",
+                                "type": "object",
+                                "description": "An explanation about the purpose of this instance.",
+                                "default": {},
+                                "required": [
+                                    "bufferLocArea",
+                                    "z"
+                                ],
+                                "properties": {
+                                    "bufferLocArea": {
+                                        "$id": "#/properties/transRegion/properties/boundaryBufferAreas/properties/buffer/items/properties/bufferLocArea",
+                                        "type": "array",
+                                        "contains": true,
+                                        "description": "An explanation about the purpose of this instance.",
+                                        "default": [],
+                                        "additionalItems": true,
+                                        "items": {
+                                            "$id": "#/properties/transRegion/properties/boundaryBufferAreas/properties/buffer/items/properties/bufferLocArea/items",
+                                            "type": "array",
+                                            "contains": true,
+                                            "description": "An explanation about the purpose of this instance.",
+                                            "default": [],
+                                            "additionalItems": true,
+                                            "items": {
+                                                "$id": "#/properties/transRegion/properties/boundaryBufferAreas/properties/buffer/items/properties/bufferLocArea/items/items",
+                                                "type": "number",
+                                                "description": "An explanation about the purpose of this instance.",
+                                                "default": 0.0
+                                            }
+                                        }
+                                    },
+                                    "z": {
+                                        "$id": "#/properties/transRegion/properties/boundaryBufferAreas/properties/buffer/items/properties/z",
+                                        "type": "integer",
+                                        "description": "An explanation about the purpose of this instance.",
+                                        "default": 0
+                                    }
+                                },
+                                "additionalProperties": true
+                            }
+                        }
+                    },
+                    "additionalProperties": true
+                }
+            },
+            "additionalProperties": true
+        },
+        "style": {
+            "$id": "#/properties/style",
+            "type": "object",
+            "description": "地图类型",
+            "default": {},
+            "required": [
+                "bgcolor",
+                "pathcolor"
+            ],
+            "properties": {
+                "bgcolor": {
+                    "$id": "#/properties/style/properties/bgcolor",
+                    "type": "string",
+                    "description": "地图背景颜色值（十六进制",
+                    "default": ""
+                },
+                "pathcolor": {
+                    "$id": "#/properties/style/properties/pathcolor",
+                    "type": "string",
+                    "description": "地图导航线颜色值（十六进制）",
+                    "default": ""
+                }
+            },
+            "additionalProperties": true
+        },
+        "routePolicies": {
+            "$id": "#/properties/routePolicies",
+            "type": "array",
+            "contains": true,
+            "description": "An explanation about the purpose of this instance.",
+            "default": [],
+            "additionalItems": true,
+            "items": {
+                "$id": "#/properties/routePolicies/items",
+                "type": "object",
+                "description": "An explanation about the purpose of this instance.",
+                "default": {},
+                "required": [
+                    "mode",
+                    "policies"
+                ],
+                "properties": {
+                    "mode": {
+                        "$id": "#/properties/routePolicies/items/properties/mode",
+                        "type": "string",
+                        "description": "An explanation about the purpose of this instance.",
+                        "default": ""
+                    },
+                    "policies": {
+                        "$id": "#/properties/routePolicies/items/properties/policies",
+                        "type": "array",
+                        "contains": true,
+                        "description": "An explanation about the purpose of this instance.",
+                        "default": [],
+                        "additionalItems": true,
+                        "items": {
+                            "$id": "#/properties/routePolicies/items/properties/policies/items",
+                            "type": "object",
+                            "description": "An explanation about the purpose of this instance.",
+                            "default": {},
+                            "required": [
+                            ],
+                            "properties": {
+                                "id": {
+                                    "$id": "#/properties/routePolicies/items/properties/policies/items/properties/id",
+                                    "type": "string",
+                                    "description": "An explanation about the purpose of this instance.",
+                                    "default": ""
+                                },
+                                "name": {
+                                    "$id": "#/properties/routePolicies/items/properties/policies/items/properties/name",
+                                    "type": "string",
+                                    "description": "An explanation about the purpose of this instance.",
+                                    "default": ""
+                                },
+                                "changeFloorWaitCost": {
+                                    "$id": "#/properties/routePolicies/items/properties/policies/items/properties/changeFloorWaitCost",
+                                    "type": "object",
+                                    "description": "An explanation about the purpose of this instance.",
+                                    "default": {},
+                                    "required": [
+                                        "lift"
+                                    ],
+                                    "properties": {
+                                        "lift": {
+                                            "$id": "#/properties/routePolicies/items/properties/policies/items/properties/changeFloorWaitCost/properties/lift",
+                                            "type": "integer",
+                                            "description": "An explanation about the purpose of this instance.",
+                                            "default": 0
+                                        }
+                                    },
+                                    "additionalProperties": true
+                                },
+                                "changeFloorFactor": {
+                                    "$id": "#/properties/routePolicies/items/properties/policies/items/properties/changeFloorFactor",
+                                    "type": "object",
+                                    "description": "An explanation about the purpose of this instance.",
+                                    "default": {},
+                                    "required": [
+                                    ],
+                                    "properties": {
+                                        "stairs": {
+                                            "$id": "#/properties/routePolicies/items/properties/policies/items/properties/changeFloorFactor/properties/stairs",
+                                            "type": "integer",
+                                            "description": "An explanation about the purpose of this instance.",
+                                            "default": 0
+                                        },
+                                        "lift": {
+                                            "$id": "#/properties/routePolicies/items/properties/policies/items/properties/changeFloorFactor/properties/lift",
+                                            "type": "integer",
+                                            "description": "An explanation about the purpose of this instance.",
+                                            "default": 0
+                                        },
+                                        "escalator": {
+                                            "$id": "#/properties/routePolicies/items/properties/policies/items/properties/changeFloorFactor/properties/escalator",
+                                            "type": "integer",
+                                            "description": "An explanation about the purpose of this instance.",
+                                            "default": 0
+                                        }
+                                    },
+                                    "additionalProperties": true
+                                },
+                                "reason": {
+                                    "$id": "#/properties/routePolicies/items/properties/policies/items/properties/reason",
+                                    "type": "string",
+                                    "description": "An explanation about the purpose of this instance.",
+                                    "default": ""
+                                }
+                            },
+                            "additionalProperties": true
+                        }
+                    }
+                },
+                "additionalProperties": true
+            }
+        },
+        "mapdata": {
+            "$id": "#/properties/mapdata",
+            "type": "object",
+            "description": "地图数据",
+            "default": {},
+            "required": [
+            ],
+            "properties": {
+                "0": {
+                    "$id": "#/properties/mapdata/properties/0",
+                    "type": "object",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": {},
+                    "required": [
+                        "0"
+                    ],
+                    "properties": {
+                        "0": {
+                            "$id": "#/properties/mapdata/properties/0/properties/0",
+                            "type": "object",
+                            "description": "An explanation about the purpose of this instance.",
+                            "default": {},
+                            "required": [
+                                "source",
+                                "name",
+                                "poitype",
+                                "ctype",
+                                "type",
+                                "objType",
+                                "ground",
+                                "h",
+                                "zShift",
+                                "data",
+                                "rid",
+                                "lid"
+                            ],
+                            "properties": {
+                                "source": {
+                                    "$id": "#/properties/mapdata/properties/0/properties/0/properties/source",
+                                    "type": "string",
+                                    "description": "图层配置对应的图层文件名",
+                                    "default": ""
+                                },
+                                "name": {
+                                    "$id": "#/properties/mapdata/properties/0/properties/0/properties/name",
+                                    "type": "string",
+                                    "description": "An explanation about the purpose of this instance.",
+                                    "default": ""
+                                },
+                                "poitype": {
+                                    "$id": "#/properties/mapdata/properties/0/properties/0/properties/poitype",
+                                    "type": "integer",
+                                    "description": "表示该图层所属的poitype编号",
+                                    "default": 0
+                                },
+                                "ctype": {
+                                    "$id": "#/properties/mapdata/properties/0/properties/0/properties/ctype",
+                                    "type": "integer",
+                                    "description": "表示该图层使用的颜色编号.",
+                                    "default": 0
+                                },
+                                "type": {
+                                    "$id": "#/properties/mapdata/properties/0/properties/0/properties/type",
+                                    "type": "string",
+                                    "description": "表示图层要素所用的几何类型",
+                                    "default": ""
+                                },
+                                "objType": {
+                                    "$id": "#/properties/mapdata/properties/0/properties/0/properties/objType",
+                                    "type": "string",
+                                    "description": "表示图层对几何要素的渲染方式。可能值有：Extruded-要素凸出显示;Shape-要素作为平面显示",
+                                    "default": ""
+                                },
+                                "ground": {
+                                    "$id": "#/properties/mapdata/properties/0/properties/0/properties/ground",
+                                    "type": "integer",
+                                    "description": "取值范围为[0,1]，为1时，图层要素不可选中，且即使此图层objType为Extruded，它的侧面也不会被在它上面的objType为Shape的图层遮挡。同时，在前端绘制导航路线时，导航路线所在平面就在此图层的平面上",
+                                    "default": 0
+                                },
+                                "h": {
+                                    "$id": "#/properties/mapdata/properties/0/properties/0/properties/h",
+                                    "type": "number",
+                                    "description": "如果objType为Extruded时，此值起作用。此值表示要素的高度（凸出高度）",
+                                    "default": 0.0
+                                },
+                                "zShift": {
+                                    "$id": "#/properties/mapdata/properties/0/properties/0/properties/zShift",
+                                    "type": "number",
+                                    "description": "要素在z轴方向上的偏移量（正负）",
+                                    "default": 0
+                                },
+                                "showResolution": {
+                                    "$id": "#/properties/mapdata/properties/0/properties/0/properties/showResolution",
+                                    "type": "array",
+                                    "contains": true,
+                                    "description": "图层显示的分辨率范围",
+                                    "default": [],
+                                    "additionalItems": true,
+                                    "items": {
+                                        "$id": "#/properties/mapdata/properties/0/properties/0/properties/showResolution/items",
+                                        "type": "number",
+                                        "description": "An explanation about the purpose of this instance.",
+                                        "default": 0
+                                    }
+                                },
+                                "wireframeLineW": {
+                                    "$id": "#/properties/mapdata/properties/0/properties/0/properties/wireframeLineW",
+                                    "type": "integer",
+                                    "description": "非0时，此值为要素边框宽度",
+                                    "default": 0
+                                },
+                                "data": {
+                                    "$id": "#/properties/mapdata/properties/0/properties/0/properties/data",
+                                    "type": "object",
+                                    "description": "An explanation about the purpose of this instance.",
+                                    "default": {},
+                                    "required": [
+                                        "type",
+                                        "name",
+                                        "crs",
+                                        "features"
+                                    ],
+                                    "properties": {
+                                        "type": {
+                                            "$id": "#/properties/mapdata/properties/0/properties/0/properties/data/properties/type",
+                                            "type": "string",
+                                            "description": "An explanation about the purpose of this instance.",
+                                            "default": ""
+                                        },
+                                        "name": {
+                                            "$id": "#/properties/mapdata/properties/0/properties/0/properties/data/properties/name",
+                                            "type": "string",
+                                            "description": "An explanation about the purpose of this instance.",
+                                            "default": ""
+                                        },
+                                        "crs": {
+                                            "$id": "#/properties/mapdata/properties/0/properties/0/properties/data/properties/crs",
+                                            "type": "object",
+                                            "description": "An explanation about the purpose of this instance.",
+                                            "default": {},
+                                            "required": [
+                                                "type",
+                                                "properties"
+                                            ],
+                                            "properties": {
+                                                "type": {
+                                                    "$id": "#/properties/mapdata/properties/0/properties/0/properties/data/properties/crs/properties/type",
+                                                    "type": "string",
+                                                    "description": "An explanation about the purpose of this instance.",
+                                                    "default": ""
+                                                },
+                                                "properties": {
+                                                    "$id": "#/properties/mapdata/properties/0/properties/0/properties/data/properties/crs/properties/properties",
+                                                    "type": "object",
+                                                    "description": "An explanation about the purpose of this instance.",
+                                                    "default": {},
+                                                    "required": [
+                                                        "name"
+                                                    ],
+                                                    "properties": {
+                                                        "name": {
+                                                            "$id": "#/properties/mapdata/properties/0/properties/0/properties/data/properties/crs/properties/properties/properties/name",
+                                                            "type": "string",
+                                                            "description": "An explanation about the purpose of this instance.",
+                                                            "default": ""
+                                                        }
+                                                    },
+                                                    "additionalProperties": true
+                                                }
+                                            },
+                                            "additionalProperties": true
+                                        },
+                                        "features": {
+                                            "$id": "#/properties/mapdata/properties/0/properties/0/properties/data/properties/features",
+                                            "type": "array",
+                                            "contains": true,
+                                            "description": "An explanation about the purpose of this instance.",
+                                            "default": [],
+                                            "additionalItems": true,
+                                            "items": {
+                                                "$id": "#/properties/mapdata/properties/0/properties/0/properties/data/properties/features/items",
+                                                "type": "object",
+                                                "description": "An explanation about the purpose of this instance.",
+                                                "default": {},
+                                                "required": [
+                                                    "type",
+                                                    "properties",
+                                                    "geometry"
+                                                ],
+                                                "properties": {
+                                                    "type": {
+                                                        "$id": "#/properties/mapdata/properties/0/properties/0/properties/data/properties/features/items/properties/type",
+                                                        "type": "string",
+                                                        "description": "An explanation about the purpose of this instance.",
+                                                        "default": ""
+                                                    },
+                                                    "properties": {
+                                                        "$id": "#/properties/mapdata/properties/0/properties/0/properties/data/properties/features/items/properties/properties",
+                                                        "type": "object",
+                                                        "description": "An explanation about the purpose of this instance.",
+                                                        "default": {},
+                                                        "required": [
+                                                            "id",
+                                                            "fid"
+                                                        ],
+                                                        "properties": {
+                                                            "id": {
+                                                                "$id": "#/properties/mapdata/properties/0/properties/6/properties/data/properties/features/items/properties/properties/properties/id",
+                                                                "type": "integer",
+                                                                "description": "An explanation about the purpose of this instance.",
+                                                                "default": 0
+                                                            },
+                                                            "name": {
+                                                                "$id": "#/properties/mapdata/properties/0/properties/6/properties/data/properties/features/items/properties/properties/properties/name",
+                                                                "type": "string",
+                                                                "description": "An explanation about the purpose of this instance.",
+                                                                "default": ""
+                                                            },
+                                                            "entry": {
+                                                                "$id": "#/properties/mapdata/properties/0/properties/6/properties/data/properties/features/items/properties/properties/properties/entry",
+                                                                "type": "array",
+                                                                "contains": true,
+                                                                "description": "An explanation about the purpose of this instance.",
+                                                                "default": [],
+                                                                "additionalItems": true,
+                                                                "items": {
+                                                                    "$id": "#/properties/mapdata/properties/0/properties/6/properties/data/properties/features/items/properties/properties/properties/entry/items",
+                                                                    "type": "array",
+                                                                    "contains": true,
+                                                                    "description": "An explanation about the purpose of this instance.",
+                                                                    "default": [],
+                                                                    "additionalItems": true,
+                                                                    "items": {
+                                                                        "$id": "#/properties/mapdata/properties/0/properties/6/properties/data/properties/features/items/properties/properties/properties/entry/items/items",
+                                                                        "type": "number",
+                                                                        "description": "An explanation about the purpose of this instance.",
+                                                                        "default": 0.0
+                                                                    }
+                                                                }
+                                                            },
+                                                            "src": {
+                                                                "$id": "#/properties/mapdata/properties/0/properties/6/properties/data/properties/features/items/properties/properties/properties/src",
+                                                                "type": "string",
+                                                                "description": "An explanation about the purpose of this instance.",
+                                                                "default": ""
+                                                            },
+                                                            "ydir": {
+                                                                "$id": "#/properties/mapdata/properties/0/properties/6/properties/data/properties/features/items/properties/properties/properties/ydir",
+                                                                "type": "array",
+                                                                "contains": true,
+                                                                "description": "An explanation about the purpose of this instance.",
+                                                                "default": [],
+                                                                "additionalItems": true,
+                                                                "items": {
+                                                                    "$id": "#/properties/mapdata/properties/0/properties/6/properties/data/properties/features/items/properties/properties/properties/ydir/items",
+                                                                    "type": "array",
+                                                                    "contains": true,
+                                                                    "description": "An explanation about the purpose of this instance.",
+                                                                    "default": [],
+                                                                    "additionalItems": true,
+                                                                    "items": {
+                                                                        "$id": "#/properties/mapdata/properties/0/properties/6/properties/data/properties/features/items/properties/properties/properties/ydir/items/items",
+                                                                        "type": "number",
+                                                                        "description": "An explanation about the purpose of this instance.",
+                                                                        "default": 0.0
+                                                                    }
+                                                                }
+                                                            },
+                                                            "xw": {
+                                                                "$id": "#/properties/mapdata/properties/0/properties/6/properties/data/properties/features/items/properties/properties/properties/xw",
+                                                                "type": "string",
+                                                                "description": "An explanation about the purpose of this instance.",
+                                                                "default": ""
+                                                            },
+                                                            "fid": {
+                                                                "$id": "#/properties/mapdata/properties/0/properties/6/properties/data/properties/features/items/properties/properties/properties/fid",
+                                                                "type": "integer",
+                                                                "description": "An explanation about the purpose of this instance.",
+                                                                "default": 0
+                                                            }
+                                                        },
+                                                        "additionalProperties": true
+                                                    },
+                                                    "geometry": {
+                                                        "$id": "#/properties/mapdata/properties/0/properties/0/properties/data/properties/features/items/properties/geometry",
+                                                        "type": "object",
+                                                        "description": "An explanation about the purpose of this instance.",
+                                                        "default": {},
+                                                        "required": [
+                                                            "type",
+                                                            "coordinates"
+                                                        ],
+                                                        "properties": {
+                                                            "type": {
+                                                                "$id": "#/properties/mapdata/properties/0/properties/0/properties/data/properties/features/items/properties/geometry/properties/type",
+                                                                "type": "string",
+                                                                "description": "An explanation about the purpose of this instance.",
+                                                                "default": ""
+                                                            },
+                                                            "coordinates": {
+                                                                "$id": "#/properties/mapdata/properties/0/properties/0/properties/data/properties/features/items/properties/geometry/properties/coordinates",
+                                                                "type": "array",
+                                                                "contains": true,
+                                                                "description": "An explanation about the purpose of this instance.",
+                                                                "default": [],
+                                                                "additionalItems": true,
+                                                                "items": {
+                                                                    "$id": "#/properties/mapdata/properties/0/properties/0/properties/data/properties/features/items/properties/geometry/properties/coordinates/items",
+                                                                    "type": "array",
+                                                                    "contains": true,
+                                                                    "description": "An explanation about the purpose of this instance.",
+                                                                    "default": [],
+                                                                    "additionalItems": true,
+                                                                    "items": {
+                                                                        "$id": "#/properties/mapdata/properties/0/properties/0/properties/data/properties/features/items/properties/geometry/properties/coordinates/items/items",
+                                                                        "type": "array",
+                                                                        "contains": true,
+                                                                        "description": "An explanation about the purpose of this instance.",
+                                                                        "default": [],
+                                                                        "additionalItems": true,
+                                                                        "items": {
+                                                                            "$id": "#/properties/mapdata/properties/0/properties/0/properties/data/properties/features/items/properties/geometry/properties/coordinates/items/items/items",
+                                                                            "type": "array",
+                                                                            "contains": true,
+                                                                            "description": "An explanation about the purpose of this instance.",
+                                                                            "default": [],
+                                                                            "additionalItems": true,
+                                                                            "items": {
+                                                                                "$id": "#/properties/mapdata/properties/0/properties/0/properties/data/properties/features/items/properties/geometry/properties/coordinates/items/items/items/items",
+                                                                                "type": "number",
+                                                                                "description": "An explanation about the purpose of this instance.",
+                                                                                "default": 0.0
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        },
+                                                        "additionalProperties": true
+                                                    }
+                                                },
+                                                "additionalProperties": true
+                                            }
+                                        }
+                                    },
+                                    "additionalProperties": true
+                                },
+                                "rid": {
+                                    "$id": "#/properties/mapdata/properties/0/properties/0/properties/rid",
+                                    "type": "integer",
+                                    "description": "An explanation about the purpose of this instance.",
+                                    "default": 0
+                                },
+                                "lid": {
+                                    "$id": "#/properties/mapdata/properties/0/properties/0/properties/lid",
+                                    "type": "integer",
+                                    "description": "An explanation about the purpose of this instance.",
+                                    "default": 0
+                                }
+                            },
+                            "additionalProperties": true
+                        }
+                    },
+                    "additionalProperties": true
+                }
+            },
+            "additionalProperties": true
+        },
+        "aps": {
+            "$id": "#/properties/aps",
+            "type": "array",
+            "description": "An explanation about the purpose of this instance.",
+            "default": [],
+            "contains": true,
+            "additionalItems": true,
+            "items": {
+                "$id": "#/properties/aps/items",
+                "type": "object",
+                "description": "An explanation about the purpose of this instance.",
+                "default": {},
+                "required": [
+                    "ma",
+                    "mi",
+                    "re",
+                    "x",
+                    "y"
+                ],
+                "properties": {
+                    "ma": {
+                        "$id": "#/properties/aps/items/properties/ma",
+                        "type": "integer",
+                        "description": "An explanation about the purpose of this instance.",
+                        "default": 0
+                    },
+                    "mi": {
+                        "$id": "#/properties/aps/items/properties/mi",
+                        "type": "integer",
+                        "description": "An explanation about the purpose of this instance.",
+                        "default": 0
+                    },
+                    "re": {
+                        "$id": "#/properties/aps/items/properties/re",
+                        "type": "integer",
+                        "description": "An explanation about the purpose of this instance.",
+                        "default": 0
+                    },
+                    "x": {
+                        "$id": "#/properties/aps/items/properties/x",
+                        "type": "number",
+                        "description": "An explanation about the purpose of this instance.",
+                        "default": 0.0
+                    },
+                    "y": {
+                        "$id": "#/properties/aps/items/properties/y",
+                        "type": "number",
+                        "description": "An explanation about the purpose of this instance.",
+                        "default": 0.0
+                    }
+                },
+                "additionalProperties": true
+            }
+        },
+        "roads": {
+            "$id": "#/properties/roads",
+            "type": "object",
+            "description": "An explanation about the purpose of this instance.",
+            "default": {},
+            "required": [
+                "roads",
+                "shortestDistance"
+            ],
+            "properties": {
+                "roads": {
+                    "$id": "#/properties/roads/properties/roads",
+                    "type": "object",
+                    "description": "路网数据：有多个vertex则代表为多边形",
+                    "default": {},
+                    "required": [
+                        "0"
+                    ],
+                    "properties": {
+                        "0": {
+                            "$id": "#/properties/roads/properties/roads/properties/0",
+                            "type": "array",
+                            "contains": true,
+                            "description": "An explanation about the purpose of this instance.",
+                            "default": [],
+                            "additionalItems": true,
+                            "items": {
+                                "$id": "#/properties/roads/properties/roads/properties/0/items",
+                                "type": "object",
+                                "description": "An explanation about the purpose of this instance.",
+                                "default": {},
+                                "required": [
+                                    "vertexes"
+                                ],
+                                "properties": {
+                                    "vertexes": {
+                                        "$id": "#/properties/roads/properties/roads/properties/0/items/properties/vertexes",
+                                        "type": "array",
+                                        "contains": true,
+                                        "description": "An explanation about the purpose of this instance.",
+                                        "default": [],
+                                        "additionalItems": true,
+                                        "items": {
+                                            "$id": "#/properties/roads/properties/roads/properties/0/items/properties/vertexes/items",
+                                            "type": "integer",
+                                            "description": "An explanation about the purpose of this instance.",
+                                            "default": 0
+                                        }
+                                    }
+                                },
+                                "additionalProperties": true
+                            }
+                        }
+                    },
+                    "additionalProperties": true
+                },
+                "shortestDistance": {
+                    "$id": "#/properties/roads/properties/shortestDistance",
+                    "type": "object",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": {},
+                    "required": [
+                        "0,1"
+                    ],
+                    "properties": {
+                        "0,1": {
+                            "$id": "#/properties/roads/properties/shortestDistance/properties/0%2C1",
+                            "type": "number",
+                            "description": "An explanation about the purpose of this instance.",
+                            "default": 0
+                        }
+                    },
+                    "additionalProperties": true
+                }
+            },
+            "additionalProperties": true
+        },
+        "connection": {
+            "$id": "#/properties/connection",
+            "type": "object",
+            "description": "连接成路网的点",
+            "default": {},
+            "required": [
+                "0"
+            ],
+            "properties": {
+                "0": {
+                    "$id": "#/properties/connection/properties/0",
+                    "type": "object",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": {},
+                    "required": [
+                        "x",
+                        "y",
+                        "re",
+                        "ne"
+                    ],
+                    "properties": {
+                        "x": {
+                            "$id": "#/properties/connection/properties/0/properties/x",
+                            "type": "number",
+                            "description": "An explanation about the purpose of this instance.",
+                            "default": 0.0
+                        },
+                        "y": {
+                            "$id": "#/properties/connection/properties/0/properties/y",
+                            "type": "number",
+                            "description": "An explanation about the purpose of this instance.",
+                            "default": 0.0
+                        },
+                        "re": {
+                            "$id": "#/properties/connection/properties/0/properties/re",
+                            "type": "integer",
+                            "description": "An explanation about the purpose of this instance.",
+                            "default": 0
+                        },
+                        "ne": {
+                            "$id": "#/properties/connection/properties/0/properties/ne",
+                            "type": "array",
+                            "contains": true,
+                            "description": "与点0连接在一起的点.",
+                            "default": [],
+                            "additionalItems": true,
+                            "items": {
+                                "$id": "#/properties/connection/properties/0/properties/ne/items",
+                                "type": "integer",
+                                "description": "An explanation about the purpose of this instance.",
+                                "default": 0
+                            }
+                        }
+                    },
+                    "additionalProperties": true
+                }
+            },
+            "additionalProperties": true
+        }
+    },
+    "additionalProperties": true
+}

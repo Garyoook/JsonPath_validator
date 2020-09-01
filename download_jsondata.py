@@ -7,7 +7,7 @@ import requests
 
 def download(appcode):
     # outputPath = '/Users/yg9418/Downloads/Seeklane 测试/JsonPath_validator/jsons'
-    outputPath = './多栋'
+    outputPath = './duodong'
 
     # 拉取data.json
     html = requests.get("http://test.seeklane.com/location/getConfig?appCode=" + appcode)

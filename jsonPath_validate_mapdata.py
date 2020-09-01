@@ -89,7 +89,8 @@ def generate_valid_ctype(json_obj):
 # 从Json文件中获取json)_obj，传入给main用来验证。
 def generate_jsonObj_from_file(inputfile):
     # inputfile = sys.argv[1]
-    file0 = open(inputfile, 'r')
+    inputfile = 'duodong/' + inputfile + '.json'
+    file0 = open(inputfile, 'r', encoding='UTF-8')
     lines = file0.readlines()
     jsonArr = []
     for line in lines:
@@ -546,12 +547,17 @@ def validate_lpos(json_obj):
                 lpos = jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + "." + str(j) +
                                          ".data.features[" + str(k) + "].properties.lpos")
                 if lpos:
+                    if (lpos[0] == ''):
+                        break
                     result = True
                     error_msg = []
-                    len_lpos = len(lpos[0])
+                    len_lpos = 0
+                    if isinstance(lpos[0], str):
+                        lpos_arr = json.loads(lpos[0])
+                    else:
+                        len_lpos = len(lpos[0])
                     name = ''
                     name2 = ''
-
                     if len_lpos == 1:
                         name = jsonpath.jsonpath(json_obj, "$.mapdata." + str(i) + "." + str(j) +
                                                  ".data.features[" + str(k) + "].properties.name")
@@ -623,13 +629,13 @@ def recursivly_validate(appcode):
 
     # appcode = '1273874511682342914'
     download_jsondata.download(appcode)
-    json_obj = generate_jsonObj_from_file('多栋/' + appcode + '.json')
+    json_obj = generate_jsonObj_from_file(appcode)
 
     map_name = jsonpath.jsonpath(json_obj, "$.mapinfo.name")[0]
     print(colored('---------------------------------- ' + map_name  + ' ------------------------------------------------------------------------------------', 'yellow'))
 
     print(colored('\nSchema validation:', 'yellow'))
-    os.system('java -jar jsonSchema_validate_mapdata.jar ' + '多栋/' + appcode + '.json')
+    os.system('java -jar jsonSchema_validate_mapdata.jar ' + 'duodong/' + appcode + '.json')
 
 
     print(colored('\njsonPath validation:', 'yellow'))
@@ -656,9 +662,6 @@ def validate_first_item(mapcode_path):
     print(colored(
         '---------------------------------- ' + map_name + ' ------------------------------------------------------------------------------------',
         'yellow'))
-
-    print(colored('\nSchema validation:', 'yellow'))
-    os.system('java -jar jsonSchema_validate_mapdata.jar ' + mapcode_path)
 
     print(colored('\njsonPath validation:', 'yellow'))
 
